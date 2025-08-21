@@ -68,6 +68,20 @@ const RegistrationForm: React.FC = () => {
       label: 'Comments',
       placeholder: 'Enter any additional comments or feedback...',
       style: { width: '100%', height: '100px', backgroundColor: '#ffffff', color: '#374151', borderColor: '#d1d5db', borderWidth: '1px' }
+    },
+    {
+      id: 'submit-button',
+      type: 'button',
+      label: 'Submit',
+      buttonType: 'submit',
+      style: { width: '100%', backgroundColor: '#2563eb', color: '#ffffff', borderColor: '#2563eb', borderWidth: '1px' }
+    },
+    {
+      id: 'reset-button',
+      type: 'button',
+      label: 'Reset',
+      buttonType: 'reset',
+      style: { width: '100%', backgroundColor: '#4b5563', color: '#ffffff', borderColor: '#4b5563', borderWidth: '1px' }
     }
   ]);
 
@@ -274,15 +288,19 @@ const RegistrationForm: React.FC = () => {
         </div>
 
         {/* Placeholder */}
-        {(config.type === 'text' || config.type === 'password' || config.type === 'textarea') && (
+        {(config.type === 'text' || config.type === 'password' || config.type === 'textarea' || config.type === 'button') && (
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Placeholder
+              {config.type === 'button' ? 'Button Text' : 'Placeholder'}
             </label>
             <input
               type="text"
-              value={config.placeholder || ''}
-              onChange={(e) => updateElementConfig(selectedElement, { placeholder: e.target.value })}
+              value={config.type === 'button' ? config.label : (config.placeholder || '')}
+              onChange={(e) => updateElementConfig(selectedElement, 
+                config.type === 'button' 
+                  ? { label: e.target.value }
+                  : { placeholder: e.target.value }
+              )}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -319,7 +337,7 @@ const RegistrationForm: React.FC = () => {
               placeholder="100%, 200px, auto"
             />
           </div>
-          {config.type === 'textarea' && (
+          {(config.type === 'textarea' || config.type === 'button') && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Height
@@ -701,19 +719,68 @@ const RegistrationForm: React.FC = () => {
 
                 {/* Buttons */}
                 <div className="flex space-x-4 pt-4">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
+                  {/* Submit Button */}
+                  <div 
+                    id="submit-button" 
+                    className={`flex-1 p-4 border rounded-md transition-all ${
+                      selectedElement === 'submit-button' ? 'border-blue-500 bg-blue-50' : 'border-transparent'
+                    }`}
+                    style={getElementStyle('submit-button')}
                   >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium" style={{ color: getElementConfig('submit-button')?.style.color }}>
+                        Submit Button
+                      </span>
+                      <ActionButtons elementId="submit-button" elementName="Submit Button" />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
+                      style={{
+                        width: getElementConfig('submit-button')?.style.width,
+                        height: getElementConfig('submit-button')?.style.height,
+                        backgroundColor: getElementConfig('submit-button')?.style.backgroundColor,
+                        color: getElementConfig('submit-button')?.style.color,
+                        borderColor: getElementConfig('submit-button')?.style.borderColor,
+                        borderWidth: getElementConfig('submit-button')?.style.borderWidth,
+                        borderStyle: getElementConfig('submit-button')?.style.borderWidth !== '0px' ? 'solid' : 'none',
+                      }}
+                    >
+                      {getElementConfig('submit-button')?.label}
+                    </button>
+                  </div>
+
+                  {/* Reset Button */}
+                  <div 
+                    id="reset-button" 
+                    className={`flex-1 p-4 border rounded-md transition-all ${
+                      selectedElement === 'reset-button' ? 'border-blue-500 bg-blue-50' : 'border-transparent'
+                    }`}
+                    style={getElementStyle('reset-button')}
                   >
-                    Reset
-                  </button>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium" style={{ color: getElementConfig('reset-button')?.style.color }}>
+                        Reset Button
+                      </span>
+                      <ActionButtons elementId="reset-button" elementName="Reset Button" />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      className="w-full py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors font-medium"
+                      style={{
+                        width: getElementConfig('reset-button')?.style.width,
+                        height: getElementConfig('reset-button')?.style.height,
+                        backgroundColor: getElementConfig('reset-button')?.style.backgroundColor,
+                        color: getElementConfig('reset-button')?.style.color,
+                        borderColor: getElementConfig('reset-button')?.style.borderColor,
+                        borderWidth: getElementConfig('reset-button')?.style.borderWidth,
+                        borderStyle: getElementConfig('reset-button')?.style.borderWidth !== '0px' ? 'solid' : 'none',
+                      }}
+                    >
+                      {getElementConfig('reset-button')?.label}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -788,9 +855,30 @@ const RegistrationForm: React.FC = () => {
                             alt={`Preview of ${image.name}`}
                             className="w-full h-auto border border-gray-100 rounded"
                           />
-                          <p className="text-xs text-gray-400 mt-1">
-                            {image.timestamp.toLocaleTimeString()}
-                          </p>
+                          <div className="mt-2 space-y-1">
+                            <p className="text-xs text-gray-400">
+                              {image.timestamp.toLocaleTimeString()}
+                            </p>
+                            {(() => {
+                              const elementId = image.id.split('-').slice(0, -1).join('-');
+                              const config = getElementConfig(elementId);
+                              if (config) {
+                                return (
+                                  <div className="text-xs text-gray-500 space-y-0.5">
+                                    <div className="flex justify-between">
+                                      <span>Width:</span>
+                                      <span className="font-mono">{config.style.width || 'auto'}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span>Height:</span>
+                                      <span className="font-mono">{config.style.height || 'auto'}</span>
+                                    </div>
+                                  </div>
+                                );
+                              }
+                              return null;
+                            })()}
+                          </div>
                         </div>
                       ))}
                     </div>

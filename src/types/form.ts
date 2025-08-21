@@ -34,11 +34,12 @@ export interface FormElementStyle {
 
 export interface FormElementConfig {
   id: string;
-  type: 'text' | 'select' | 'date' | 'checkbox' | 'radio' | 'password' | 'textarea';
+  type: 'text' | 'select' | 'date' | 'checkbox' | 'radio' | 'password' | 'textarea' | 'button';
   label: string;
   placeholder?: string;
   options?: string[];
   selectedOption?: string;
   format?: string;
+  buttonType?: 'submit' | 'reset';
   style: FormElementStyle;
 }
