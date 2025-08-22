@@ -266,12 +266,17 @@ const RegistrationForm: React.FC = () => {
   };
 
   const ActionButtons: React.FC<{ elementId: string; elementName: string }> = ({ elementId, elementName }) => (
-    <div className="flex items-center space-x-1 drag-handle">
+    <div className="flex items-center space-x-1">
       <button
         type="button"
+        draggable
+        onDragStart={(e) => {
+          e.stopPropagation();
+          handleDragStart(e, elementId);
+        }}
+        onDragEnd={handleDragEnd}
         className="p-2 text-gray-400 hover:text-gray-600 cursor-move transition-colors"
         title="Drag to reorder"
-        onMouseDown={(e) => e.stopPropagation()}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
           <circle cx="4" cy="4" r="1"/>
